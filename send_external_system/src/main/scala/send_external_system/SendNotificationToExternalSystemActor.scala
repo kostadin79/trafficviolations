@@ -1,4 +1,4 @@
-package TrafficViolations
+package send_external_system
 
 import akka.actor.{Actor, ActorLogging}
 

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pld-traffic-system
+  name: pld-traffic-system
+  namespace: traffic-violations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pld-traffic-system
+  template:
+    metadata:
+      labels:
+        app: pld-traffic-system
+    spec:
+      containers:
+      - name: send-external-system
+        image: traffic-violations/external-system:local
+        imagePullPolicy: Never
+        ports:
+          - name: actor
+            containerPort: 2553
+            protocol: UDP
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      - name: send-db
+        image: traffic-violations/send-data-to-db:local
+        imagePullPolicy: Never
+        ports:
+          - name: actor
+            containerPort: 2552
+            protocol: UDP
+      - name: http-api
+        image: traffic-violations/api:local
+        imagePullPolicy: Never
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+          - name: actor
+            containerPort: 2551
+            protocol: UDP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-violations-service
+  namespace: traffic-violations
+spec:
+  type: NodePort
+  ports:
+    - nodePort: 32000
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: pld-traffic-system

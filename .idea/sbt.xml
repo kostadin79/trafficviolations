@@ -11,6 +11,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/project" />
+            <option value="$PROJECT_DIR$/send_db" />
+            <option value="$PROJECT_DIR$/send_external_system" />
+            <option value="$PROJECT_DIR$/traffic_violations" />
           </set>
         </option>
         <option name="sbtVersion" value="1.9.7" />

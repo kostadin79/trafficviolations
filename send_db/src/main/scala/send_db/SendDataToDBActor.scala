@@ -1,4 +1,4 @@
-package TrafficViolations
+package send_db
 
 import akka.actor.{Actor, ActorLogging}
 object SendDataToDBActor {

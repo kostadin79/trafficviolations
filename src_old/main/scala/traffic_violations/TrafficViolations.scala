@@ -1,7 +1,6 @@
-package TrafficViolations
+package traffic_violations
 
 
-import TrafficViolations.InputRequestsFromAPIActor._
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
@@ -12,6 +11,9 @@ import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
+import traffic_violations.InputRequestsFromAPIActor._
+
+import scala.language.postfixOps
 // step 1
 import spray.json._
 
@@ -24,25 +26,26 @@ trait ViolationJsonProtocol extends DefaultJsonProtocol {
       implicit val violationFormat: RootJsonFormat[Violation] = jsonFormat3(Violation)
 }
 
-object TrafficViolationsApp extends App with ViolationJsonProtocol with SprayJsonSupport {
+object TrafficViolations extends App with ViolationJsonProtocol with SprayJsonSupport {
 
-      implicit val system: ActorSystem = ActorSystem("ViolationSystem")
+      implicit val system: ActorSystem = ActorSystem("ViolationSystem",ConfigFactory.load("remote.conf"))
       implicit val materializer: ActorMaterializer = ActorMaterializer()
-      import TrafficViolations.{InputRequestsFromAPIActor, StreamToApacheSparkActor}
       import system.dispatcher
+      import traffic_violations.{InputRequestsFromAPIActor, StreamToApacheSparkActor}
 
-////      val sendDataToDBActor = system.actorOf(Props[SendDataToDBActor], "sendDataToDBActor")
+////      val sendDataToDBActor = system.actorOf(Props[SendDataToDBActor.scala], "sendDataToDBActor")
 //    val sendDataToDBSystem = ActorSystem("sendDataToDBActor", ConfigFactory.load("remote.conf").getConfig("remoteSystem"))
 
-//  private val config = ConfigFactory.load("remote.conf")
-//  private val sendDataToDBIP = config.getString("ip-mapping.ip-db-actor")
-//  private val sendNotificationToExternalSystemIP = config.getString("ip-mapping.ip-external-system-actor")
-//  val sendDataToDBActor = system.actorSelection(s"akka://sendDataToDBSystem@${sendDataToDBIP}:2552/user/sendDataToDBActor")
-//  val sendNotificationToExternalSystemActor = system.actorSelection(s"akka://SendNotificationToExternalSystem@${sendNotificationToExternalSystemIP}:2553/user/sendNotificationToExternalSystemActor")
-val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("remote.conf").getConfig("sendDataToDBSystem"))
-  val sendDataToDBActor = sendDataToDBSystem.actorOf(Props[SendDataToDBActor], "sendDataToDBActor")
-  val sendNotificationToExternalSystem = ActorSystem("SendNotificationToExternalSystem", ConfigFactory.load("remote.conf").getConfig("SendNotificationToExternalSystem"))
-  val sendNotificationToExternalSystemActor = sendNotificationToExternalSystem.actorOf(Props[SendNotificationToExternalSystemActor], "sendNotificationToExternalSystemActor")
+  private val config = ConfigFactory.load("remote.conf")
+  private val sendDataToDBIP = config.getString("ip-mapping.ip-db-actor")
+  private val sendNotificationToExternalSystemIP = config.getString("ip-mapping.ip-external-system-actor")
+  println(s"external ip:${sendNotificationToExternalSystemIP}")
+  val sendDataToDBActor = system.actorSelection("akka://sendDataToDBSystem@localhost:2552/user/sendDataToDBActor")
+  val sendNotificationToExternalSystemActor = system.actorSelection("akka://SendNotificationToExternalSystem@localhost:2553/user/sendNotificationToExternalSystemActor")
+//val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("remote.conf").getConfig("sendDataToDBSystem"))
+//  val sendDataToDBActor = sendDataToDBSystem.actorOf(Props[SendDataToDBActor.scala], "sendDataToDBActor")
+//  val sendNotificationToExternalSystem = ActorSystem("SendNotificationToExternalSystem", ConfigFactory.load("remote.conf").getConfig("SendNotificationToExternalSystem"))
+//  val sendNotificationToExternalSystemActor = sendNotificationToExternalSystem.actorOf(Props[SendNotificationToExternalSystemActor], "sendNotificationToExternalSystemActor")
  val inputRequestsFromAPIActor = system.actorOf(Props( new InputRequestsFromAPIActor(sendDataToDBActor ,sendNotificationToExternalSystemActor)), "inputRequestsFromAPIActor")
 
 
@@ -61,16 +64,7 @@ val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("r
         inputRequestsFromAPIActor ! AddViolation(violation)
       }
 
-      /*
-        - GET /api/violation, returns all the players in the map, as JSON
-        - GET /api/violation/(violationId), returns the player with the given nickname (as JSON)
-        - GET /api/violation?violationId=X, does the same
-        - GET /api/violation/class/(charClass), returns all the violations with the given character class
-        - POST /api/violation with JSON payload, adds the player to the map
-        - (Exercise) DELETE /api/violation with JSON payload, removes the player from the map
-       */
-
-      implicit val timeout = Timeout(2 seconds)
+      implicit val timeout: Timeout = Timeout(2 seconds)
       val violationsRouteSkel =
             pathPrefix("api" / "violation") {
                   get {
@@ -88,13 +82,13 @@ val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("r
                           }
                   } ~
                     post {
-                          entity(implicitly[FromRequestUnmarshaller[Violation]]) { player =>
-                                complete((inputRequestsFromAPIActor ? AddViolation(player)).map(_ => StatusCodes.OK))
+                          entity(implicitly[FromRequestUnmarshaller[Violation]]) { violation =>
+                                complete((inputRequestsFromAPIActor ? AddViolation(violation)).map(_ => StatusCodes.OK))
                           }
                     } ~
                     delete {
-                          entity(as[Violation]) { player =>
-                                complete((inputRequestsFromAPIActor ? RemoveViolation(player)).map(_ => StatusCodes.OK))
+                          entity(as[Violation]) { violation =>
+                                complete((inputRequestsFromAPIActor ? RemoveViolation(violation)).map(_ => StatusCodes.OK))
                           }
                     }
             }
@@ -105,7 +99,7 @@ val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("r
 
 //object SendDataToDBApp extends App {
 //  val sendDataToDBSystem = ActorSystem("sendDataToDBSystem", ConfigFactory.load("remote.conf").getConfig("sendDataToDBSystem"))
-//  val sendDataToDBActor = sendDataToDBSystem.actorOf(Props[SendDataToDBActor], "sendDataToDBActor")
+//  val sendDataToDBActor = sendDataToDBSystem.actorOf(Props[SendDataToDBActor.scala], "sendDataToDBActor")
 //}
 
 //object  SendNotificationToExternalSystemApp extends App {

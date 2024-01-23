@@ -9,6 +9,7 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/codeStyles/
+.idea/workspace.xml
 *.iws
 *.iml
 *.ipr
@@ -18,6 +19,8 @@ target
 journal
 snapshots
 logs
+workspace.xml
+/.idea/
 
 ### Eclipse ###
 .apt_generated

@@ -1,6 +1,6 @@
-package TrafficViolations
+package traffic_violations
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorSelection}
 
 object InputRequestsFromAPIActor {
   case object GetAllViolations
@@ -17,7 +17,8 @@ object InputRequestsFromAPIActor {
 }
 
 
-class InputRequestsFromAPIActor(val sendDataToDB: ActorRef, val sendNotification: ActorRef) extends Actor with ActorLogging {
+class InputRequestsFromAPIActor(val sendDataToDB: ActorSelection, val sendNotification: ActorSelection) extends Actor with ActorLogging {
+
   import InputRequestsFromAPIActor._
 
   var violations: Map[String, Violation] = Map[String, Violation]()
@@ -40,11 +41,11 @@ class InputRequestsFromAPIActor(val sendDataToDB: ActorRef, val sendNotification
       violations = violations + (violation.violationId -> violation)
       sendDataToDB ! s"violation: ${violation.violationId}"
       sendNotification ! s"violation: ${violation.violationId}"
-//      sender() ! OperationSuccess
+    //      sender() ! OperationSuccess
 
-    case RemoveViolation(player) =>
-      log.info(s"Trying to remove $player")
-      violations = violations - player.violationId
+    case RemoveViolation(violation) =>
+      log.info(s"Trying to remove $violation")
+      violations = violations - violation.violationId
       sender() ! OperationSuccess
 
     case _ =>

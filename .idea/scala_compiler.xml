@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="TrafficViolations,akka-http,traffic-violation-system" />
+    <profile name="sbt 1" modules="TrafficViolations,akka-http,external-system,multi-docker,send-data-to-db,send-to-external-system,traffic-violation-system,traffic-violations,traffic-violations-api,trafficviolations" />
   </component>
 </project>

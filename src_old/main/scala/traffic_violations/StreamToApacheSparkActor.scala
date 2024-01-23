@@ -1,4 +1,4 @@
-package TrafficViolations
+package traffic_violations
 
 import akka.actor.{Actor, ActorLogging}
 
