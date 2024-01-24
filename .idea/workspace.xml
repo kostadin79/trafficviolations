@@ -4,20 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e6f304-bc06-43c4-86d1-622f62bab8ab" name="Changes" comment="Initial setup">
-      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
+    <list default="true" id="14e6f304-bc06-43c4-86d1-622f62bab8ab" name="Changes" comment="Initial setup II">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/plugins.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/project/plugins.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/remote.conf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TrafficViolations/InputRequestsFromAPIActor.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TrafficViolations/SendDataToDBActor.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TrafficViolations/SendNotificationToExternalSystemActor.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TrafficViolations/StreamToApacheSparkActor.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TrafficViolations/TrafficViolations.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/send_db/src/main/resources/remote.conf" beforeDir="false" afterPath="$PROJECT_DIR$/send_db/src/main/resources/remote.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/send_external_system/src/main/resources/remote.conf" beforeDir="false" afterPath="$PROJECT_DIR$/send_external_system/src/main/resources/remote.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/traffic_violations/src/main/resources/remote.conf" beforeDir="false" afterPath="$PROJECT_DIR$/traffic_violations/src/main/resources/remote.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/traffic_violations/src/main/scala/traffic_violations/TrafficViolations.scala" beforeDir="false" afterPath="$PROJECT_DIR$/traffic_violations/src/main/scala/traffic_violations/TrafficViolations.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702990282618</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Initial setup II">
+      <option name="closed" value="true" />
+      <created>1706016451674</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1706016451674</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,7 +262,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -270,7 +282,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial setup" />
+    <MESSAGE value="Initial setup II" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial setup II" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
