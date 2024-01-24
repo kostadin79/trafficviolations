@@ -27,6 +27,8 @@ lazy val send_db = project
       // testing
       "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion,
+      "io.aeron" % "aeron-driver" % "1.42.1",
+      "io.aeron" % "aeron-client" % "1.42.1"
     )
   )
 
@@ -60,7 +62,9 @@ lazy val traffic_violations = project
       "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion,
       // JWT
-      "com.pauldijou" %% "jwt-spray-json" % "2.1.0"
+      "com.pauldijou" %% "jwt-spray-json" % "2.1.0",
+      "io.aeron" % "aeron-driver" % "1.42.1",
+      "io.aeron" % "aeron-client" % "1.42.1"
     )
   )
 
@@ -89,5 +93,7 @@ lazy val send_external_system = project
       // testing
       "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion,
+      "io.aeron" % "aeron-driver" % "1.42.1",
+      "io.aeron" % "aeron-client" % "1.42.1"
     )
   )
